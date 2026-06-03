@@ -1,12 +1,10 @@
 import express from 'express';
-import mongoose from 'mongoose';
 
+import { connectDatabase } from './database';
 import { Activity, LeaderboardEntry, Team, User, Workout } from './models';
 
 const app = express();
 const port = 8000;
-
-const mongoUri = process.env.MONGODB_URI ?? 'mongodb://127.0.0.1:27017/octofit_db';
 
 const codespaceName = process.env.CODESPACE_NAME;
 const baseUrl = codespaceName
@@ -77,7 +75,7 @@ app.use((error: unknown, _req: express.Request, res: express.Response, _next: ex
 
 async function startServer(): Promise<void> {
   try {
-    await mongoose.connect(mongoUri);
+    await connectDatabase();
     app.listen(port, () => {
       // Keep the startup log explicit so the expected backend port is always visible.
       console.log(`OctoFit backend running on ${baseUrl}`);
