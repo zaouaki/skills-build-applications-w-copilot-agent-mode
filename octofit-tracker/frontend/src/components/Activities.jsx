@@ -1,5 +1,9 @@
 import ResourcePage from './ResourcePage.jsx'
 
+const activitiesEndpoint = import.meta.env.VITE_CODESPACE_NAME
+  ? `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/activities/`
+  : 'http://localhost:8000/api/activities/'
+
 function formatDate(value) {
   if (!value) {
     return 'Scheduled'
@@ -12,6 +16,7 @@ function Activities() {
   return (
     <ResourcePage
       collectionName="activities"
+      endpoint={activitiesEndpoint}
       title="Activity log"
       description="Recent workouts and fitness activity recorded across teams."
       columns={['Date', 'Athlete', 'Team', 'Type', 'Duration', 'Calories']}

@@ -1,9 +1,14 @@
 import ResourcePage from './ResourcePage.jsx'
 
+const workoutsEndpoint = import.meta.env.VITE_CODESPACE_NAME
+  ? `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/workouts/`
+  : 'http://localhost:8000/api/workouts/'
+
 function Workouts() {
   return (
     <ResourcePage
       collectionName="workouts"
+      endpoint={workoutsEndpoint}
       title="Workout suggestions"
       description="Personalized workout recommendations for varied fitness goals."
       columns={['Workout', 'Category', 'Difficulty', 'Duration', 'Focus areas', 'Why']}

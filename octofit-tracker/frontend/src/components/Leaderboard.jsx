@@ -1,9 +1,14 @@
 import ResourcePage from './ResourcePage.jsx'
 
+const leaderboardEndpoint = import.meta.env.VITE_CODESPACE_NAME
+  ? `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/leaderboard/`
+  : 'http://localhost:8000/api/leaderboard/'
+
 function Leaderboard() {
   return (
     <ResourcePage
       collectionName="leaderboard"
+      endpoint={leaderboardEndpoint}
       title="Leaderboard"
       description="Current competitive standings by weekly activity points."
       columns={['Rank', 'Athlete', 'Team', 'Points', 'Weekly minutes']}

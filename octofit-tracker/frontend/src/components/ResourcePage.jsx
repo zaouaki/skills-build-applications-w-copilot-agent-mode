@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { getApiUrl, getCollection } from '../apiBaseUrl.ts'
 
-function ResourcePage({ collectionName, title, description, columns, renderItem }) {
+function ResourcePage({ collectionName, endpoint, title, description, columns, renderItem }) {
   const [items, setItems] = useState([])
   const [status, setStatus] = useState('loading')
   const [error, setError] = useState('')
@@ -14,7 +14,7 @@ function ResourcePage({ collectionName, title, description, columns, renderItem 
       setError('')
 
       try {
-        const response = await fetch(getApiUrl(collectionName))
+        const response = await fetch(endpoint ?? getApiUrl(collectionName))
 
         if (!response.ok) {
           throw new Error(`Request failed with status ${response.status}`)
@@ -40,7 +40,7 @@ function ResourcePage({ collectionName, title, description, columns, renderItem 
     return () => {
       ignore = true
     }
-  }, [collectionName])
+  }, [collectionName, endpoint])
 
   return (
     <section className="resource-panel">
