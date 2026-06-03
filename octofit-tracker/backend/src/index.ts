@@ -2,14 +2,9 @@ import express from 'express';
 
 import { connectDatabase } from './database';
 import { Activity, LeaderboardEntry, Team, User, Workout } from './models';
+import { baseUrl, port } from './server';
 
 const app = express();
-const port = 8000;
-
-const codespaceName = process.env.CODESPACE_NAME;
-const baseUrl = codespaceName
-  ? `https://${codespaceName}-8000.app.github.dev`
-  : 'http://localhost:8000';
 
 app.use(express.json());
 

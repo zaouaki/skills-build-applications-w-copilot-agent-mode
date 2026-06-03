@@ -6,20 +6,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const database_1 = require("./database");
 const models_1 = require("./models");
+const server_1 = require("./server");
 const app = (0, express_1.default)();
-const port = 8000;
-const codespaceName = process.env.CODESPACE_NAME;
-const baseUrl = codespaceName
-    ? `https://${codespaceName}-8000.app.github.dev`
-    : 'http://localhost:8000';
 app.use(express_1.default.json());
 app.get('/api/health', (_req, res) => {
-    res.json({ status: 'ok', service: 'octofit-backend', baseUrl });
+    res.json({ status: 'ok', service: 'octofit-backend', baseUrl: server_1.baseUrl });
 });
 app.get('/api/users/', async (_req, res, next) => {
     try {
         const users = await models_1.User.find().sort({ displayName: 1 });
-        res.json({ users, apiUrl: `${baseUrl}/api/users/` });
+        res.json({ users, apiUrl: `${server_1.baseUrl}/api/users/` });
     }
     catch (error) {
         next(error);
@@ -28,7 +24,7 @@ app.get('/api/users/', async (_req, res, next) => {
 app.get('/api/teams/', async (_req, res, next) => {
     try {
         const teams = await models_1.Team.find().sort({ name: 1 });
-        res.json({ teams, apiUrl: `${baseUrl}/api/teams/` });
+        res.json({ teams, apiUrl: `${server_1.baseUrl}/api/teams/` });
     }
     catch (error) {
         next(error);
@@ -40,7 +36,7 @@ app.get('/api/activities/', async (_req, res, next) => {
             .populate('user', 'username displayName')
             .populate('team', 'name')
             .sort({ activityDate: -1 });
-        res.json({ activities, apiUrl: `${baseUrl}/api/activities/` });
+        res.json({ activities, apiUrl: `${server_1.baseUrl}/api/activities/` });
     }
     catch (error) {
         next(error);
@@ -52,7 +48,7 @@ app.get('/api/leaderboard/', async (_req, res, next) => {
             .populate('user', 'username displayName')
             .populate('team', 'name')
             .sort({ rank: 1 });
-        res.json({ leaderboard, apiUrl: `${baseUrl}/api/leaderboard/` });
+        res.json({ leaderboard, apiUrl: `${server_1.baseUrl}/api/leaderboard/` });
     }
     catch (error) {
         next(error);
@@ -61,7 +57,7 @@ app.get('/api/leaderboard/', async (_req, res, next) => {
 app.get('/api/workouts/', async (_req, res, next) => {
     try {
         const workouts = await models_1.Workout.find().sort({ difficulty: 1, title: 1 });
-        res.json({ workouts, apiUrl: `${baseUrl}/api/workouts/` });
+        res.json({ workouts, apiUrl: `${server_1.baseUrl}/api/workouts/` });
     }
     catch (error) {
         next(error);
@@ -74,9 +70,9 @@ app.use((error, _req, res, _next) => {
 async function startServer() {
     try {
         await (0, database_1.connectDatabase)();
-        app.listen(port, () => {
+        app.listen(server_1.port, () => {
             // Keep the startup log explicit so the expected backend port is always visible.
-            console.log(`OctoFit backend running on ${baseUrl}`);
+            console.log(`OctoFit backend running on ${server_1.baseUrl}`);
         });
     }
     catch (error) {
